@@ -1,0 +1,13 @@
+/* .userListingTable-Button{
+    background: transparent;
+    color: blue;
+    border: none;
+} */
+.userListing-actionCol{
+    display: flex;
+    align-items: center;
+}
+.userListing-details-link {
+    text-decoration: none !important;
+
+}

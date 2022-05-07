@@ -731,7 +731,11 @@ export default class componentName extends Component {
             </LocalizationProvider>
           </Grid>
         </Grid>
-        <Button variant="outlined" style={{ marginTop: 20 }}>
+        <Button
+          onClick={handeSubmit}
+          variant="outlined"
+          style={{ marginTop: 20 }}
+        >
           Submit
         </Button>
       </div>

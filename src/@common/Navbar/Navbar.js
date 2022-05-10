@@ -9,7 +9,7 @@ export default function Navbarr() {
           <Nav className="me-auto" navbar>
             <NavItem>
               <NavLink>
-                <Link style={{ color: "white" }} to="/add">
+                <Link style={{ color: "white" }} to="/AddorEdit">
                   Add Customer
                 </Link>
               </NavLink>

@@ -1,3 +1,4 @@
+import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -7,19 +8,18 @@ import UserListingTable from "./components/UserListing/UserListingTable";
 import UserDetails from "./components/UserDetails/UserDetails";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-function App() {
-  return (
-    <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<UserListingTable />} />
-          <Route path="/Add" element={<AddOrEdit />} />{" "}
-          <Route path="/details" element={<UserDetails />} />
-        </Routes>
-      </Router>
-    </>
-  );
-}
+export default class App extends Component {
+  render() {
+    return (
+      <>
+        <Router>
+          <Navbar />
 
-export default App;
+          <Route exact path="/" component={UserListingTable} />
+          <Route exact path="/AddorEdit" component={AddOrEdit} />
+          <Route exact path="/details" component={UserDetails} />
+        </Router>
+      </>
+    );
+  }
+}

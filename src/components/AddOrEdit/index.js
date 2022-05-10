@@ -19,7 +19,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Axios from "axios";
 import "react-phone-input-2/lib/style.css";
-export default class componentName extends Component {
+import { ROOT_URL } from "../../constants/config";
+import { withRouter } from "react-router-dom";
+class AddorEdit extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +43,9 @@ export default class componentName extends Component {
         ? this.props.PrevData?.patientOccupation
         : "",
       NextLoading: false,
+      Fname: "",
+      Lname: "",
+      Email: "",
       AllAddresses: [
         {
           AddressType: "",
@@ -49,7 +54,7 @@ export default class componentName extends Component {
           City: "",
           CountryId: 1,
           StateId: 5,
-          ZipCode: 5646,
+          ZipCode: null,
         },
       ],
       AllContact: [
@@ -66,12 +71,41 @@ export default class componentName extends Component {
       MembershipPrice: "",
       StartDate: null,
       EndDate: null,
+      edit: false,
+      CustomerId: null,
+      MumberShipId: null,
     };
     // this.getAllCountry();
   }
 
   componentDidMount() {
     this.getAllCountry();
+
+    let {
+      history: {
+        location: { state },
+      },
+    } = this.props;
+
+    console.log(state);
+    if (state) {
+      this.setState({
+        Fname: state.FirstName,
+        Lname: state.LastName,
+        Email: state.Email,
+        DateOfBirth: state.DateOfBirth,
+        AllAddresses: state.Address,
+        AllContact: state.ContactInfo,
+        MembershipType: state.MembershipInfo.MembershipType,
+        BillingFrequency: state.MembershipInfo.BillingFrequency,
+        MembershipPrice: state.MembershipInfo.MembershipPrice,
+        StartDate: state.MembershipInfo.StartDate,
+        EndDate: state.MembershipInfo.EndDate,
+        CustomerId: state.CustomerId,
+        edit: true,
+        MumberShipId: state.MembershipInfo.Id,
+      });
+    }
     // this.StatePopulatedcountrybase("US");
   }
   getAllCountry = () => {
@@ -166,7 +200,7 @@ export default class componentName extends Component {
     this.setState({
       selectstate: selectstate,
     });
-    this.state.AllAddresses[index].StateId = selectstate;
+    this.state.AllAddresses[index].StateId = selectstate.name;
     var headers = new Headers();
     headers.append(
       "X-CSCAPI-KEY",
@@ -339,31 +373,111 @@ export default class componentName extends Component {
       EndDate,
       BillingFrequency,
     } = this.state;
-    let body = {
-      firstName: Fname,
-      lastName: Lname,
-      email: Email,
-      DateOfBirth: DateOfBirth,
-      contactinfo: AllContact,
-      Address: AllAddresses,
-      MembershipInfo: {
-        MembershipType: MembershipType,
-        MemberShipPrice: MembershipPrice,
-        StartDate: StartDate,
-        EndDate: EndDate,
-        BillingFrequency: BillingFrequency,
-      },
-    };
-    Axios.post(`https://localhost:7201/api/AddCustomer`, body)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (Fname == "") {
+      alert("Please fill First Name");
+      return;
+    }
+    if (Lname == "") {
+      alert("Please fill Last Name");
+      return;
+    }
+    if (Email == "") {
+      alert("Please fill Email");
+      return;
+    }
+    if (MembershipType == "") {
+      alert("Please fill MembershipType");
+      return;
+    }
+    if (MembershipPrice == "") {
+      alert("Please fill MembershipPrice");
+      return;
+    }
+    if (StartDate == null) {
+      alert("Please fill StartDate");
+      return;
+    }
+    if (AllAddresses.length !== 0) {
+      let validate = false;
+      for (let index = 0; index < AllAddresses.length; index++) {
+        if (
+          AllAddresses[index].AddressLine1 !== "" &&
+          AllAddresses[index].AddressType !== "" &&
+          AllAddresses[index].City !== "" &&
+          AllAddresses[index].StateId !== "" &&
+          AllAddresses[index].CountryId !== "" &&
+          AllAddresses[index].ZipCode !== null
+        ) {
+          validate = true;
+        } else {
+          validate = false;
+        }
+      }
+      if (!validate) {
+        alert("Please Fill  Required Field in Address");
+      }
+    } else {
+      alert("Please Add Address");
+    }
+    if (this.state.edit) {
+      let body = {
+        firstName: Fname,
+        id: this.state.CustomerId,
+        lastName: Lname,
+        email: Email,
+        DateOfBirth: DateOfBirth,
+        contactinfo: AllContact,
+        Address: AllAddresses,
+        MembershipInfo: {
+          MembershipType: MembershipType,
+          MemberShipPrice: MembershipPrice,
+          StartDate: StartDate,
+          EndDate: EndDate,
+          BillingFrequency: BillingFrequency,
+          Id: this.state.MumberShipId,
+        },
+      };
+      console.log(body);
+      Axios.post(`${ROOT_URL}/api/UpdateCustomer`, body)
+        .then((res) => {
+          console.log(res.data);
+          alert("Update SuccessFully");
+          this.props.history.push("/");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      let body = {
+        firstName: Fname,
+        lastName: Lname,
+        email: Email,
+        DateOfBirth: DateOfBirth,
+        contactinfo: AllContact,
+        Address: AllAddresses,
+        MembershipInfo: {
+          MembershipType: MembershipType,
+          MemberShipPrice: MembershipPrice,
+          StartDate: StartDate,
+          EndDate: EndDate,
+          BillingFrequency: BillingFrequency,
+        },
+      };
+      console.log(body);
+      Axios.post(`${ROOT_URL}/api/AddCustomer`, body)
+        .then((res) => {
+          console.log(res.data);
+          alert("Add SuccessFully");
+          this.props.history.push("/");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
+
   render() {
-    console.log(this.state);
+    console.log(this.state, this.props);
     return (
       <div className="AddWrapper">
         <h1 style={{ padding: 5 }}>Add Customer </h1>
@@ -376,6 +490,7 @@ export default class componentName extends Component {
               label="First Name"
               name="Fname"
               variant="outlined"
+              value={this.state.Fname}
               onChange={this.handelGetinputValue}
             />
           </Grid>
@@ -386,6 +501,7 @@ export default class componentName extends Component {
               label="Last Name"
               name="Lname"
               variant="outlined"
+              value={this.state.Lname}
               onChange={this.handelGetinputValue}
             />
           </Grid>
@@ -396,6 +512,7 @@ export default class componentName extends Component {
               label="Email"
               name="Email"
               variant="outlined"
+              value={this.state.Email}
               onChange={this.handelGetinputValue}
             />
           </Grid>
@@ -742,3 +859,4 @@ export default class componentName extends Component {
     );
   }
 }
+export default AddorEdit;

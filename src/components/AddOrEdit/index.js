@@ -81,6 +81,7 @@ class AddorEdit extends React.PureComponent {
   componentDidMount() {
     this.getAllCountry();
 
+    //Edit Customer  Data To Set in State
     let {
       history: {
         location: { state },
@@ -106,8 +107,8 @@ class AddorEdit extends React.PureComponent {
         MumberShipId: state.MembershipInfo.Id,
       });
     }
-    // this.StatePopulatedcountrybase("US");
   }
+  //Get All country ThirdParty API's
   getAllCountry = () => {
     var headers = new Headers();
     headers.append(
@@ -130,6 +131,7 @@ class AddorEdit extends React.PureComponent {
       )
       .catch((error) => console.log("error", error));
   };
+  // Countery Flag
   countryToFlag(isoCode) {
     return typeof String.fromCodePoint !== "undefined"
       ? isoCode
@@ -139,12 +141,8 @@ class AddorEdit extends React.PureComponent {
           )
       : isoCode;
   }
-
+  // Get All State Data by Select Contry
   StatePopulatedcountrybase = (v, selectCountry, index) => {
-    // this.setState({
-    //   selectCountry: selectCountry,
-    // });
-
     var headers = new Headers();
     headers.append(
       "X-CSCAPI-KEY",
@@ -153,7 +151,6 @@ class AddorEdit extends React.PureComponent {
     headers.append("Access-Control-Allow-Origin", "http://localhost:3002");
     headers.append("Access-Control-Allow-Credentials", "true");
     headers.append("Content-Type", "application/json");
-
     var requestOptions = {
       mode: "cors",
       method: "GET",
@@ -164,7 +161,7 @@ class AddorEdit extends React.PureComponent {
       },
       redirect: "follow",
     };
-    // Pass Country Code -- Eg: Country Code : IN
+
     fetch(
       `https://api.countrystatecity.in/v1/countries/${v}/states`,
       requestOptions
@@ -195,7 +192,7 @@ class AddorEdit extends React.PureComponent {
       })
       .catch((error) => console.log("error", error));
   };
-
+  // All City Data by Select State
   CityPopulatedCstatebase = (CountryCode, selectstate, index) => {
     this.setState({
       selectstate: selectstate,
@@ -230,6 +227,7 @@ class AddorEdit extends React.PureComponent {
       })
       .catch((error) => console.log("error", error));
   };
+  // Add More Address
   OnAddmoreAddress = () => {
     let Data = {
       AddressType: "",
@@ -240,6 +238,8 @@ class AddorEdit extends React.PureComponent {
       StateId: null,
       ZipCode: null,
     };
+    // Push the Data in Array
+    // This is called Spread Operator
     this.setState({
       AllAddresses: [...this.state.AllAddresses, Data],
     });
@@ -252,13 +252,15 @@ class AddorEdit extends React.PureComponent {
       this.setState({ AllAddresses: attachments });
     }
   };
-
+  // Add More Contact
   OnAddmoreContact = () => {
     let Data = {
       contacttype: "",
       contactemail: null,
       ContactNumber: null,
     };
+    // Push the Data in Array
+    // This is called Spread Operator
     this.setState({
       AllContact: [...this.state.AllContact, Data],
     });
@@ -286,6 +288,7 @@ class AddorEdit extends React.PureComponent {
       }
     );
   };
+  // This Function Tell us Age of User
   getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
@@ -296,6 +299,7 @@ class AddorEdit extends React.PureComponent {
     }
     return age;
   }
+  // Get Input Value
   handelGetinputValue = (e) => {
     let { value, name } = e.target;
     this.setState({
@@ -859,4 +863,4 @@ class AddorEdit extends React.PureComponent {
     );
   }
 }
-export default AddorEdit;
+export default withRouter(AddorEdit);

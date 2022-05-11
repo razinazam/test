@@ -5,27 +5,14 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Button } from "@mui/material";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import moment from "moment";
 import "./userListingTable.css";
 import { ROOT_URL } from "../../constants/config";
 
 export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [Data, setData] = React.useState([]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
   const userListingHeader = [
     {
       label: "First Name",
@@ -36,31 +23,20 @@ export default function StickyHeadTable() {
       label5: "Next Invoice Date",
     },
   ];
-  const userListingBody = [
-    {
-      FirstName: "mario",
-      LastName: "setdd",
-      Email: "il@gmail.com",
-      MembershipType: "premium",
-      BillingFrequency: "29 days ago",
-      NextInvoiceDate: "2 days",
-    },
-  ];
+
   React.useEffect(() => {
     getDat();
   }, []);
+  // Get Data For Customer List
   const getDat = () => {
     fetch(`${ROOT_URL}/api/GetCustomersList`, {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      // mode: 'no-cors', // no-cors, *cors, same-origin
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Accept: "*/*",
-        // 'Accept-Encoding':'gzip, deflate, br'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
-      .then((response) => response.json()) //Here is the error
+      .then((response) => response.json())
       .then((data) => {
         console.log(JSON.parse(data));
         setData(JSON.parse(data));
@@ -80,7 +56,6 @@ export default function StickyHeadTable() {
                   <TableCell key={index}>{items.label}</TableCell>
                   <TableCell key={index}>{items.label1}</TableCell>
                   <TableCell key={index}>{items.label2}</TableCell>
-
                   <TableCell key={index}>{items.label4}</TableCell>
                   <TableCell key={index}>{items.label5}</TableCell>
                   <TableCell>Action</TableCell>
@@ -89,12 +64,8 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {userListingBody
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((items, index) => {
-                                return ( */}
             {Data.map((items, index) => (
-              <TableRow hover role="checkbox" tabIndex={-1}>
+              <TableRow key={index} hover role="checkbox" tabIndex={-1}>
                 <>
                   <TableCell>{items.FirstName}</TableCell>
 
@@ -136,15 +107,6 @@ export default function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={userListingBody.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
     </Paper>
   );
 }

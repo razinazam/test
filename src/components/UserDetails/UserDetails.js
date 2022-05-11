@@ -10,13 +10,6 @@ export default function UserDetails() {
   useEffect(() => {
     setPersonalInfo(navigate.state);
   }, [navigate]);
-  // a.Personal Information
-  // b.Address Information with all addresses
-  // c.Contact Information with all contacts
-  // d.Membership Information along with the Next Invoice date
-  // e.All generated invoices
-  const address = ["addddeess1", "addddeess2", "addddeess3"];
-  const contact = ["03123123123", "021321312", "012312"];
   return (
     <>
       <div className="userDetail-wrapper">

@@ -615,7 +615,6 @@ class AddorEdit extends React.PureComponent {
                 <Grid item md={6}>
                   <Autocomplete
                     className="EligbnbleAutocomplete"
-                    // id="combo-box-demo"
                     id="country"
                     options={this.state.Allcountry}
                     onChange={(event, newValue) => {
@@ -629,13 +628,6 @@ class AddorEdit extends React.PureComponent {
                         this.StatePopulatedcountrybase("");
                       }
                     }}
-                    // inputValue="United States"
-                    // renderOption={(option) => (
-                    //   <React.Fragment>
-                    //     {/* <span>{this.countryToFlag(option.iso2)}</span> */}
-                    //     {option.name} ({option.iso2})
-                    //   </React.Fragment>
-                    // )}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
                       <TextField
@@ -648,8 +640,6 @@ class AddorEdit extends React.PureComponent {
                 </Grid>
                 <Grid item md={6}>
                   <Autocomplete
-                    // freeSolo
-                    // disabled={this.state.SelecterCity.length == 0 ? true : false}
                     className="EligbnbleAutocomplete"
                     onChange={(event, newValue) => {
                       if (newValue?.iso2) {
@@ -662,19 +652,7 @@ class AddorEdit extends React.PureComponent {
                         this.CityPopulatedCstatebase("");
                       }
                     }}
-                    // getOptionSelected={(option, value) =>
-                    // option.name === this.state.selectstate.name
-                    // }
-                    // id="combo-box-demo"
                     id="state"
-                    // renderOption={(option) => (
-                    //   <React.Fragment>
-                    //     {/* <span>{this.countryToFlag(option.iso2)}</span> */}
-                    //     <div>
-                    //       {option.name} ({option.iso2})
-                    //     </div>
-                    //   </React.Fragment>
-                    // )}
                     options={this.state.SelecterCity}
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
@@ -725,7 +703,6 @@ class AddorEdit extends React.PureComponent {
                     marginTop: 10,
                   }}
                 >
-                  {/* <h2>{index + 1}</h2> */}
                   {i == 0 ? null : (
                     <IconButton onClick={() => this.deleteContact(v)}>
                       <DeleteIcon />
